@@ -3,7 +3,7 @@ package dev.university.project.controller;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("api/v1/management")
+@RequestMapping("api/management")
 public class ManagementController {
 
     @GetMapping
