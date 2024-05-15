@@ -1,17 +1,15 @@
-# Use an official Maven image as the base image
-FROM eclipse-temurin:17-jdk AS build
-# Set the working directory in the container
-WORKDIR /Project
-# Copy the pom.xml and the project files to the container
-COPY pom.xml .
-COPY src ./src
-# Build the application using Maven
-RUN mvn clean package -DskipTests
-# Use an official OpenJDK image as the base image
-FROM eclipse-temurin:17-jdk
-# Set the working directory in the container
-WORKDIR /Project
-# Copy the built JAR file from the previous stage to the container
-COPY --from=build /Project/target/Project-0.0.1-SNAPSHOT.jar .
-# Set the command to run the application
-CMD ["java", "-jar", "Project-0.0.1-SNAPSHOT.jar.jar"]
+#
+# Build stage
+#
+FROM maven:3.6.0-jdk-17-slim AS build
+COPY src /home/app/src
+COPY pom.xml /home/app
+RUN mvn -f /home/app/pom.xml clean package
+
+#
+# Package stage
+#
+FROM openjdk:17-jre-slim
+COPY --from=build /home/app/target/Project-0.0.1-SNAPSHOT.jar /usr/local/lib/Project-0.0.1-SNAPSHOT.jar
+EXPOSE 8080
+ENTRYPOINT ["java","-jar","/usr/local/lib/Project-0.0.1-SNAPSHOT.jar"]
