@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/products")
+@RequestMapping("api/products")
 public class ProductController {
 
     @Autowired
@@ -36,13 +36,5 @@ public class ProductController {
     @PostMapping
     public ResponseEntity<Product> createProduct(Product product) {
         return ResponseEntity.ok(productService.createProduct(product));
-    }
-    @GetMapping("/{name}")
-    public ResponseEntity<Product> getProductByName(@PathVariable String name) {
-        return ResponseEntity.ok(productService.getProductByName(name));
-    }
-    @GetMapping("/{category}")
-    public ResponseEntity<Product> findProductByCategory(@PathVariable Category category) {
-        return ResponseEntity.ok(productService.getProductByCategory(category));
     }
 }
