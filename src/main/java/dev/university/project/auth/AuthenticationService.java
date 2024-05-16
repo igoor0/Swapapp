@@ -1,7 +1,7 @@
 package dev.university.project.auth;
 
 import dev.university.project.config.JwtService;
-import dev.university.project.exception.UserNotFoundException;
+import dev.university.project.exception.ApiRequestException;
 import dev.university.project.model.Role;
 import dev.university.project.model.User;
 import dev.university.project.repository.UserRepository;
@@ -28,7 +28,11 @@ public class AuthenticationService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(Role.USER)
                 .build();
-        userRepository.save(user);
+        if(userRepository.findByEmail(request.getEmail()).isPresent()){
+            throw new ApiRequestException("User with email " + request.getEmail() + " already exists");
+        }else {
+            userRepository.save(user);
+        }
         var jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
@@ -41,7 +45,7 @@ public class AuthenticationService {
                         request.getEmail(),
                         request.getPassword())
         );
-        var user = userRepository.findByEmail(request.getEmail()).orElseThrow(() -> new UserNotFoundException(request.getEmail()));
+        var user = userRepository.findByEmail(request.getEmail()).orElseThrow(() -> new ApiRequestException("User with the email " + request.getEmail() + " not found"));
         var jwtToken = jwtService.generateToken(user);
         return  AuthenticationResponse.builder()
                 .token(jwtToken)

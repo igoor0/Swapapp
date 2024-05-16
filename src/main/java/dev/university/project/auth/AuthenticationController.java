@@ -1,5 +1,6 @@
 package dev.university.project.auth;
 
+import dev.university.project.exception.ApiRequestException;
 import lombok.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,7 +17,7 @@ public class AuthenticationController {
 
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequest registerRequest) {
-        return ResponseEntity.ok(authenticationService.register(registerRequest));
+        return ResponseEntity.ok().body(authenticationService.register(registerRequest));
     }
 
     @PostMapping("/authenticate")
