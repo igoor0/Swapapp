@@ -27,10 +27,15 @@ public class WebSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(
-                        auth -> auth.requestMatchers("/api/auth/**")
+                        auth -> auth.requestMatchers("/api/admin/**", "/api/management/**", "swagger-ui/index.html#/")
+                                .hasRole("ADMIN")
+                                .anyRequest()
+                                .authenticated()
+                                    .requestMatchers("/api/auth/**")
                                 .permitAll()
                                 .anyRequest()
-                                .authenticated())
+                                .authenticated()
+                                )
                 .authenticationProvider(authenticationProvider).addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .httpBasic(Customizer.withDefaults())
