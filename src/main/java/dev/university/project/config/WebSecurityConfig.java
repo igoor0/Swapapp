@@ -29,11 +29,15 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity.csrf(csrf -> csrf.disable())
+                .cors(cors -> cors.disable())
                 .authorizeHttpRequests(
                         auth -> auth
                                     .requestMatchers("/api/auth/**").permitAll()
+                                    .requestMatchers("/api/home/**").permitAll()
                                     .requestMatchers("swagger-ui/**").hasAnyRole("ADMIN")
                                     .requestMatchers("v3/api-docs").hasAnyRole("ADMIN")
+                                    .requestMatchers("/api/admin/**").hasAnyRole("ADMIN")
+                                    .requestMatchers("/api/management/**").hasAnyRole("ADMIN")
                                 .anyRequest()
                                 .authenticated()
                                 )
