@@ -32,9 +32,7 @@ public class WebSecurityConfig {
         CsrfTokenRequestAttributeHandler requestHandler = new CsrfTokenRequestAttributeHandler();
         // set the name of the attribute the CsrfToken will be populated on
         requestHandler.setCsrfRequestAttributeName(null);
-        return httpSecurity.csrf(csrf -> csrf.disable())
-                .cors(Customizer.withDefaults())
-                .authorizeHttpRequests(
+                httpSecurity.authorizeHttpRequests(
                         auth -> auth
                                     .requestMatchers("/api/auth/**").permitAll()
                                     .requestMatchers("/api/home/**").permitAll()
@@ -47,7 +45,9 @@ public class WebSecurityConfig {
                                 )
                 .authenticationProvider(authenticationProvider).addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .httpBasic(Customizer.withDefaults())
-                .build();
+            .csrf(csrf -> csrf.disable())
+            .cors(Customizer.withDefaults())
+            .httpBasic(Customizer.withDefaults());
+            return httpSecurity.build();
     }
 }
