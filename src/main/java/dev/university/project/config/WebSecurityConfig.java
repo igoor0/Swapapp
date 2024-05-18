@@ -33,7 +33,7 @@ public class WebSecurityConfig {
         // set the name of the attribute the CsrfToken will be populated on
         requestHandler.setCsrfRequestAttributeName(null);
         return httpSecurity.csrf(csrf -> csrf.disable())
-                .cors(cors -> cors.disable())
+                .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(
                         auth -> auth
                                     .requestMatchers("/api/auth/**").permitAll()
