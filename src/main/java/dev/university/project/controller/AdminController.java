@@ -1,11 +1,12 @@
 package dev.university.project.controller;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api/admin")
-public class AdminController {
+ public class AdminController {
 
     @GetMapping
     public ResponseEntity<String> get() {
