@@ -2,7 +2,10 @@ package dev.university.project.service;
 
 import dev.university.project.model.Category;
 import dev.university.project.model.Product;
+import dev.university.project.model.User;
+import dev.university.project.repository.CategoryRepository;
 import dev.university.project.repository.ProductRepository;
+import dev.university.project.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +17,10 @@ import java.util.List;
 public class ProductService {
     @Autowired
     private ProductRepository productRepository;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     public List<Product> getProducts() {
         return productRepository.findAll();
@@ -21,7 +28,11 @@ public class ProductService {
     public Product getProduct(String id) {
         return productRepository.findById(id).orElse(null);
     }
-    public Product createProduct(Product product) {
+    public Product createProduct(String categoryId, String userId, Product product) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        product.setProductOwner(user);
+        Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new RuntimeException("Category not found"));
+        product.setCategory(category);
         return productRepository.save(product);
     }
     public Product updateProduct(String id, Product product) {
@@ -32,9 +43,8 @@ public class ProductService {
         existingProduct.setName(product.getName());
         existingProduct.setDescription(product.getDescription());
         existingProduct.setPrice(product.getPrice());
-        existingProduct.setQuantity(product.getQuantity());
         existingProduct.setCategory(product.getCategory());
-        existingProduct.setImage(product.getImage());
+        //existingProduct.setImage(product.getImage());
         return productRepository.save(existingProduct);
     }
     public boolean deleteProduct(String id) {
@@ -53,5 +63,8 @@ public class ProductService {
     }
     public Product getProductByPrice(double price) {
         return productRepository.findByPrice(price);
+    }
+    public List<Product> getProductsByProductOwner(String productOwnerId) {
+        return productRepository.findAllByProductOwner(productOwnerId);
     }
 }
