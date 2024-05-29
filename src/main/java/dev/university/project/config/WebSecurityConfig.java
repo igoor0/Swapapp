@@ -40,19 +40,19 @@ public class WebSecurityConfig {
                 httpSecurity.authorizeHttpRequests(
                         auth -> auth
                                     .requestMatchers("/api/auth/**").permitAll()
-                                    .requestMatchers("/api/home/**").permitAll()
+                                    .requestMatchers("/api/products/**").permitAll()
                                     .requestMatchers("swagger-ui/**").hasAnyRole("ADMIN")
                                     .requestMatchers("v3/api-docs").hasAnyRole("ADMIN")
                                     .requestMatchers("/api/admin/**").hasAnyRole("ADMIN")
                                     .requestMatchers("/api/management/**").hasAnyRole("ADMIN")
+                                    .requestMatchers("/api/categories/**").hasAnyRole("ADMIN")
                                 .anyRequest()
                                 .authenticated()
                                 )
                 .authenticationProvider(authenticationProvider).addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .csrf(csrf -> csrf.disable())
-            .cors(Customizer.withDefaults())
-            .httpBasic(Customizer.withDefaults());
+            .cors(Customizer.withDefaults());
             return httpSecurity.build();
     }
     @Bean
