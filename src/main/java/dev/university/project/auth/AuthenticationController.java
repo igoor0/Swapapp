@@ -3,10 +3,7 @@ package dev.university.project.auth;
 import dev.university.project.exception.ApiRequestException;
 import lombok.*;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RequestMapping("/api/auth")
@@ -24,4 +21,10 @@ public class AuthenticationController {
     public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest loginRequest) {
         return ResponseEntity.ok(authenticationService.authenticate(loginRequest));
     }
+
+    @PutMapping("/change-password")
+    public ResponseEntity<AuthenticationResponse> changePassword(@RequestBody ChangePasswordRequest changePasswordRequest) {
+        return ResponseEntity.ok(authenticationService.changePassword(changePasswordRequest));
+    }
+
 }

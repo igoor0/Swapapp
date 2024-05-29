@@ -51,4 +51,18 @@ public class AuthenticationService {
                 .token(jwtToken)
                 .build();
     }
+
+    public AuthenticationResponse changePassword(ChangePasswordRequest changePasswordRequest) {
+        var user = userRepository.findByEmail(changePasswordRequest.getEmail()).orElseThrow(() -> new ApiRequestException("User with the email " + changePasswordRequest.getEmail() + " not found"));
+        if(passwordEncoder.matches(changePasswordRequest.getOldPassword(), user.getPassword())){
+            user.setPassword(passwordEncoder.encode(changePasswordRequest.getNewPassword()));
+            userRepository.save(user);
+            var jwtToken = jwtService.generateToken(user);
+            return AuthenticationResponse.builder()
+                    .token(jwtToken)
+                    .build();
+        }else {
+            throw new ApiRequestException("Old password is incorrect");
+        }
+    }
 }
