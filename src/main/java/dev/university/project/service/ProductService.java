@@ -9,8 +9,6 @@ import dev.university.project.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -28,9 +26,22 @@ public class ProductService {
     public Product getProduct(String id) {
         return productRepository.findById(id).orElse(null);
     }
+
+//    public Product createProduct(String categoryId, String userId, Product product) {
+//        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+//        product.setOwnerId(user.getId());
+//        Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new RuntimeException("Category not found"));
+//        product.setCategory(category);
+//
+//        User productOwner = userRepository.findById(product.getOwnerId()).orElseThrow(() -> new RuntimeException("User not found"));
+//        productOwner.getOwnedProductIdList().add(product.getOwnerId());
+//        userRepository.save(productOwner);
+//        return productRepository.save(product);
+//    }
+
     public Product createProduct(String categoryId, String userId, Product product) {
         User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
-        product.setProductOwner(user);
+        product.setOwnerId(user.getId());
         Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new RuntimeException("Category not found"));
         product.setCategory(category);
         return productRepository.save(product);
@@ -65,6 +76,6 @@ public class ProductService {
         return productRepository.findByPrice(price);
     }
     public List<Product> getProductsByProductOwner(String productOwnerId) {
-        return productRepository.findAllByProductOwner(productOwnerId);
+        return productRepository.findAllByOwnerId(productOwnerId);
     }
 }

@@ -1,5 +1,6 @@
 package dev.university.project.service;
 
+import dev.university.project.model.Transaction;
 import dev.university.project.model.User;
 import dev.university.project.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,4 +23,9 @@ public class UserService {
     public User getUserByEmailOrId(String emailOrId) {
             return userRepository.findByEmail(emailOrId).orElseGet(() -> getUser(emailOrId));
     }
+//    public void updateUserTransactionList(Transaction transaction) {
+//        User seller = getUser(transaction.getSellerId());
+//        seller.getTransactionIdList().add(transaction.getId());
+//        userRepository.save(seller);
+//    }
 }

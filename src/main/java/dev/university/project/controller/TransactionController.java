@@ -28,4 +28,15 @@ public class TransactionController {
     public ResponseEntity<Transaction> getTransaction(@PathVariable String transactionId) {
         return ResponseEntity.ok(transactionService.getTransaction(transactionId));
     }
+
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<Transaction>> getTransactionsByUserId(@PathVariable String userId) {
+        return ResponseEntity.ok(transactionService.getTransactionsByUserId(userId));
+    }
+
+    @DeleteMapping("/{transactionId}")
+    public ResponseEntity<Boolean> deleteTransaction(@PathVariable String transactionId) {
+        return ResponseEntity.ok(transactionService.deleteTransaction(transactionId));
+    }
+
 }
