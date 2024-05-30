@@ -22,6 +22,5 @@ public class Product {
     @DBRef
     private Category category;
     private String image;
-    @DBRef
-    private User productOwner;
+    private String ownerId;
 }
