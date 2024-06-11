@@ -10,7 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class TransactionService {
@@ -58,12 +61,22 @@ public class TransactionService {
     }
 
 
-    public List<Transaction> getTransactionsByUserId(String userId) {
-        return transactionRepository.findAllBySellerId(userId);
+    public List<Transaction> getTransactionsBySellerId(String sellerId) {
+        return transactionRepository.findAllBySellerId(sellerId);
+    }
+    public List<Transaction> getTransactionByBuyerId(String buyerId) {
+        return transactionRepository.findAllByBuyerId(buyerId);
     }
 
     public Boolean deleteTransaction(String transactionId) {
         transactionRepository.deleteById(transactionId);
         return true;
+    }
+
+    public List<Transaction> getTransactionsBySellerOrBuyer(String userId) {
+        List<Transaction> l1 = getTransactionsBySellerId(userId);
+        List<Transaction> l2 = getTransactionByBuyerId(userId);
+        List<Transaction> l3 = Stream.concat(l1.stream(), l2.stream()).collect(Collectors.toList());
+        return l3;
     }
 }

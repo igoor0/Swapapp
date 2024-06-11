@@ -46,6 +46,7 @@ public class ProductService {
         product.setCategory(category);
         return productRepository.save(product);
     }
+
     public Product updateProduct(String id, Product product) {
         Product existingProduct = productRepository.findById(id).orElse(null);
         if (existingProduct == null) {
